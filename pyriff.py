@@ -267,7 +267,7 @@ def runTest():
     testDoubleChunk.append(0)
 
     testFloatChunk = ChunkFloat("f32 ")
-    testFloatChunk.set(1234.5678)
+    testFloatChunk.set(123.4567)
     testFloatChunk.append(0.000001)
     testFloatChunk.append(-1)
     testFloatChunk.append(0)
