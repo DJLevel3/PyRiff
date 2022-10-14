@@ -204,15 +204,22 @@ class Riff(Chunk):
         finalBinary.extend(self.id.encode())
         finalBinary.extend(len(dataBinary).to_bytes(4, 'little'))
         finalBinary.extend(dataBinary)
+        if len(finalBinary) % 2 != 0:
+            finalBinary.extend((0).to_bytes(1,'little'))
         return finalBinary
     
     def dataToBin(self):
         if len(self.dataList) == 0:
             raise ValueError("Riff chunk must contain at least one subchunk!")
         else:
+            pos = 0
             dataBinary = bytearray()
             for i in self.dataList:
-                dataBinary.extend(i.getBinary())
+                if pos % 2 != 0:
+                    tempBin.extend((0).to_bytes(1,'little'))
+                tempBin = i.getBinary()
+                pos = len(tempBin)
+                dataBinary.extend(tempBin)
             return dataBinary
     
     def addChunk(self, chunk):
@@ -272,6 +279,9 @@ def runTest():
     testFloatChunk.append(-1)
     testFloatChunk.append(0)
 
+    endChunk = ChunkStr("end ")
+    endChunk.set("and that's all the tests! congratulations!!")
+
     testRiff.addChunk(testChunk)
     testRiff.addChunk(testBinChunk)
     testRiff.addChunk(testStrChunk)
@@ -279,6 +289,7 @@ def runTest():
     testRiff.addChunk(testInt16Chunk)
     testRiff.addChunk(testDoubleChunk)
     testRiff.addChunk(testFloatChunk)
+    testRiff.addChunk(endChunk)
 
     with open("testRIFF.riff", "wb") as f:
         f.write(bytes(testRiff.getBinary()))
