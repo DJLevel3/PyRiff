@@ -295,4 +295,12 @@ def runTest():
         f.write(bytes(testRiff.getBinary()))
 
 if __name__ == "__main__":
-    runTest()
+    import timeit
+    nRuns = 20000
+    print("Testing...")
+    duration = timeit.Timer(runTest).timeit(nRuns)
+    print("Testing done!")
+    print(f"Number of runs: {nRuns}")
+    print(f"Elapsed time: {duration:.2f} seconds")
+    print(f"Average time per run: {duration / nRuns:.5f} seconds ({1000000 * duration/nRuns:.2f} microseconds)")
+    print(f"Runs per second: {nRuns / duration:.1f}")
